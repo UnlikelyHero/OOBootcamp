@@ -1,31 +1,51 @@
 <?php
 
 class Person {
-  private $name;
-  private $age;
+  protected $name;
 
   public function __construct($name) {
     $this->name = $name;
-
-  }
-
-  public function getAge() {
-    return $this->age * 365;
-
-  }
-
-  public function setAge($age) {
-    if ($age < 18) {
-      throw new Exception("Person is under age");
-    }
-
-    $this->age = $age;
   }
 }
 
-$john = new Person('John Doe');
-$john->setAge(34);
+class Business {
+  protected $staff;
 
-var_dump($john->getAge());
+  public function __construct(Staff $staff) {
+    $this->staff = $staff;
+  }
+
+  public function hire(Person $person) {
+    //add person to the staff collection
+    $this->staff->add($person);
+  }
+
+  public function getStaffMembers() {
+    return $this->staff->members();
+  }
+}
+
+class Staff {
+  protected $members = [];
+
+  public function __construct($members = []) {
+    $this->members = $members;
+  }
+
+  public function add(Person $person) {
+    $this->members[] = $person;
+  }
+
+  public function members() {
+    return $this->members;
+  }
+}
+
+$don = new Person('Donald Vida');
+$staff = new Staff([$don]);
+$vidaweb = new Business($staff);
+$vidaweb->hire(new Person('Shawn Dibble'));
+
+var_dump($vidaweb->getStaffMembers());
 
  ?>
